@@ -1,27 +1,26 @@
 #!/bin/python3
 
-import subprocess
-import sys
+from subprocess import run
+from sys import argv
 
 def PrintUsage():
-	quit("usage: ./main.py [wifi dev] [SSID] [scan freq in minutes] [debug y/n]")
+	quit("usage: ./main.py [wifi dev] [SSID] [whitelisted MAC] [scan freq in minutes] [debug y/n]")
 
-def ParseArgv():
-	if len(sys.argv) != 5:
-		PrintUsage()
+if len(argv) != 6:
+	PrintUsage()
 
-	if sys.argv[4] == "y":
-		debug = 1
-	elif sys.argv[4] == "n":
-		debug = 0
-	else:
-		PrintUsage()
+if argv[5] == "y":
+	debug = 1
+elif argv[5] == "n":
+	debug = 0
+else:
+	PrintUsage()
 
-	dev = sys.argv[1]
-	ssid = sys.argv[2]
-	freq = sys.argv[3]
+if len(argv[3].split(":")) != 6:
+	PrintUsage()
 
-def main():
-	ParseArgv()
-	
-main()
+dev = argv[1]
+ssid = argv[2]
+freq = argv[4]
+
+
