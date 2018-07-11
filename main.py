@@ -2,6 +2,10 @@
 
 from subprocess import run
 from sys import argv
+from os import geteuid
+
+if geteuid() != 0:
+	quit("root required")
 
 def PrintUsage():
 	quit("usage: ./main.py [wifi dev] [SSID] [whitelisted MAC] [scan freq in minutes] [debug y/n]")
@@ -23,4 +27,21 @@ dev = argv[1]
 ssid = argv[2]
 freq = argv[4]
 
+if debug:
+	print("# attempting to kill processes intervening with airmon-ng")
+
+run(["airmon-ng", "check", "kill"])
+
+if debug:
+	print("# starting airmon-ng on interface", dev)
+
+run(["airmon-ng", "start", dev])
+
+if debug:
+	print("# running airodump-ng on", dev)
+
+run(["airodump-ng", dev])
+
+# while loop with the frequency
+# scan channel by channel
 
